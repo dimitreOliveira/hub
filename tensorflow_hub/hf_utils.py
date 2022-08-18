@@ -1,17 +1,18 @@
+from pathlib import Path
+from typing import Any, List, Dict, Optional, Union
+
 import tensorflow as tf
-from keras_layer import KerasLayer
+from tensorflow_hub.keras_layer import KerasLayer
 from huggingface_hub import snapshot_download, create_repo, HfApi, HfFolder
 
 
 def pull_from_hub(repo_id: str,
-    revision=None,
-    local_files_only=False,
-    allow_regex=None,
-    ignore_regex=None,
-    trainable=False,
+    local_files_only: Optional[bool]=False,
+    allow_regex: Optional[Union[List[str], str]]=None,
+    ignore_regex: Optional[Union[List[str], str]]=None,
+    trainable: Optional[bool]=False,
 ):
     model_path = snapshot_download(repo_id=repo_id,
-                                   revision=revision,
                                    local_files_only=local_files_only,
                                    allow_regex=allow_regex,
                                    ignore_regex=ignore_regex,
@@ -20,11 +21,11 @@ def pull_from_hub(repo_id: str,
                       trainable=trainable,
                     )
 
-def push_to_hub(model,
-                repo_id, 
-                folder_path,
-                path_in_repo="./",
-                token=None,
+def push_to_hub(model: tf.keras.layers.Layer,
+                repo_id: str,
+                folder_path: str,
+                path_in_repo: str="./",
+                token: str=None,
               ):
   
     if token is None:
